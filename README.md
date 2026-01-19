@@ -1,1 +1,345 @@
-# edible-gallery
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jenny Cabrera - Edible Art Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: #0a0e27;
+            color: #f4e8d8;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a2456 50%, #0a0e27 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, rgba(212, 175, 115, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 50%, rgba(212, 175, 115, 0.05) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            animation: fadeIn 2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        h1 {
+            font-size: 5rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            color: #d4af73;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(212, 175, 115, 0.5);
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            color: #f4e8d8;
+            opacity: 0.8;
+        }
+
+        /* Gallery Section */
+        .gallery {
+            padding: 100px 5%;
+            background: #0a0e27;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .art-piece {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .art-piece:hover {
+            transform: scale(1.02) translateY(-10px);
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .art-piece:nth-child(1) .image-container {
+            clip-path: polygon(0 0, 100% 5%, 100% 95%, 0 100%);
+        }
+
+        .art-piece:nth-child(2) .image-container {
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+        }
+
+        .art-piece:nth-child(3) .image-container {
+            clip-path: polygon(0 5%, 100% 0, 100% 100%, 0 95%);
+        }
+
+        .art-piece img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(0.85) contrast(1.1);
+        }
+
+        .art-piece:hover img {
+            transform: scale(1.1);
+            filter: brightness(1) contrast(1.2);
+        }
+
+        .art-info {
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(26, 36, 86, 0.3) 0%, rgba(10, 14, 39, 0.5) 100%);
+            backdrop-filter: blur(10px);
+            border-left: 3px solid #d4af73;
+            margin-top: 20px;
+        }
+
+        .art-title {
+            font-size: 2rem;
+            color: #d4af73;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            font-style: italic;
+        }
+
+        .art-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #f4e8d8;
+            opacity: 0.9;
+        }
+
+        /* Floating Elements */
+        .ocean-element {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.15;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .ocean-element:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            font-size: 60px;
+            animation-delay: 0s;
+        }
+
+        .ocean-element:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            font-size: 80px;
+            animation-delay: 5s;
+        }
+
+        .ocean-element:nth-child(3) {
+            bottom: 15%;
+            left: 15%;
+            font-size: 70px;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-30px) rotate(5deg); }
+            50% { transform: translateY(-50px) rotate(-5deg); }
+            75% { transform: translateY(-30px) rotate(3deg); }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-20px); }
+            60% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .scroll-indicator::before {
+            content: '↓';
+            font-size: 2rem;
+            color: #d4af73;
+            opacity: 0.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; letter-spacing: 4px; }
+            .tagline { font-size: 1rem; letter-spacing: 2px; }
+            .gallery-grid { grid-template-columns: 1fr; gap: 40px; }
+            .image-container { height: 400px; }
+            .art-piece:nth-child(1) .image-container,
+            .art-piece:nth-child(2) .image-container,
+            .art-piece:nth-child(3) .image-container {
+                clip-path: none;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Floating Ocean Elements -->
+    <div class="ocean-element">🌊</div>
+    <div class="ocean-element">🌺</div>
+    <div class="ocean-element">🦋</div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Whisk -->
+                    <g transform="translate(70, 80)">
+                        <ellipse cx="10" cy="0" rx="3" ry="15" fill="none" stroke="#d4af73" stroke-width="1.5"/>
+                        <ellipse cx="20" cy="0" rx="3" ry="18" fill="none" stroke="#d4af73" stroke-width="1.5"/>
+                        <ellipse cx="30" cy="0" rx="3" ry="15" fill="none" stroke="#d4af73" stroke-width="1.5"/>
+                        <rect x="18" y="-25" width="4" height="30" fill="#d4af73"/>
+                    </g>
+                    <!-- Lotus Flower -->
+                    <g transform="translate(120, 70)">
+                        <path d="M 0,0 Q -5,-10 -8,-5 Q -10,0 -5,5 Q 0,8 0,0 Z" fill="none" stroke="#d4af73" stroke-width="1.5"/>
+                        <path d="M 0,0 Q 5,-10 8,-5 Q 10,0 5,5 Q 0,8 0,0 Z" fill="none" stroke="#d4af73" stroke-width="1.5"/>
+                        <path d="M 0,0 Q -2,-15 -12,-10 Q -15,-5 -8,2 Q 0,5 0,0 Z" fill="none" stroke="#d4af73" stroke-width="1.5"/>
+                        <path d="M 0,0 Q 2,-15 12,-10 Q 15,-5 8,2 Q 0,5 0,0 Z" fill="none" stroke="#d4af73" stroke-width="1.5"/>
+                        <path d="M 0,0 Q 0,-18 -15,-15 Q -18,-8 -10,5 Q 0,8 0,0 Z" fill="none" stroke="#d4af73" stroke-width="1.5"/>
+                        <path d="M 0,0 Q 0,-18 15,-15 Q 18,-8 10,5 Q 0,8 0,0 Z" fill="none" stroke="#d4af73" stroke-width="1.5"/>
+                        <circle cx="0" cy="0" r="3" fill="#d4af73"/>
+                    </g>
+                </svg>
+            </div>
+            <h1>JENNY CABRERA</h1>
+            <p class="tagline">EDIBLE ART GALLERY</p>
+        </div>
+        <div class="scroll-indicator"></div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery">
+        <div class="gallery-grid">
+            <!-- Art Piece 1 -->
+            <div class="art-piece">
+                <div class="image-container">
+                    <img src="seahorse.png" width='600' height='800'/%3E%3C/svg%3E" alt="Caballito de Mar de Azúcar">
+                </div>
+                <div class="art-info">
+                    <h3 class="art-title">Fantasía Marina Efímera</h3>
+                    <p class="art-description">
+                        Una inmersión en la fantasía. Escultura de azúcar soplado y modelado a mano, capturando la iridiscencia de la vida marina con una precisión asombrosa. Una pieza de coleccionista para los amantes del arte efímero.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Art Piece 2 -->
+            <div class="art-piece">
+                <div class="image-container">
+                    <img src="cake.png" alt="Pastel de Castaña">
+                </div>
+                <div class="art-info">
+                    <h3 class="art-title">Corazón Floreal Oculto</h3>
+                    <p class="art-description">
+                        La sofisticación reside en lo oculto. Un corazón de pétalos de rosa frescos y crema ligera de infusión floral, envuelto en la calidez de la castaña. Una experiencia sensorial diseñada para sorprender y deleitar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Art Piece 3 -->
+            <div class="art-piece">
+                <div class="image-container">
+                    <img src="orquid.png" alt="Orquídea Pollock">
+                </div>
+                <div class="art-info">
+                    <h3 class="art-title">Orquídea Pollock</h3>
+                    <p class="art-description">
+                        Naturaleza reimaginada. Orquídea de chocolate plástico pintada a mano con manteca de cacao en una explosión de color expresionista. Una escultura comestible que desafía las normas y celebra la individualidad artística.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scroll effect
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Parallax effect for ocean elements
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const elements = document.querySelectorAll('.ocean-element');
+            elements.forEach((element, index) => {
+                const speed = 0.5 + (index * 0.2);
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
