@@ -1,1 +1,608 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jenny Cabrera — Galería de arte comestible. Esculturas de azúcar, chocolate y flores comestibles hechas a mano.">
+  <meta name="author" content="Jenny Cabrera">
+  <title>Jenny Cabrera — Edible Art Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --gold: #c9a55a;
+      --gold-light: #e8c97a;
+      --bg: #06091e;
+      --bg2: #0c1030;
+      --text: #f0e6d4;
+      --text-muted: #d4c4b0;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─ HERO ─ */
+    .hero {
+      position: relative;
+      height: 100svh;
+      min-height: 380px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 60%, #1a2356 0%, var(--bg) 100%);
+    }
+    .hero-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 0.5px solid rgba(201,165,90,0.15);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation: ringpulse 6s ease-in-out infinite;
+    }
+    .hero-ring:nth-child(2) { width: 280px; height: 280px; animation-delay: 0s; }
+    .hero-ring:nth-child(3) { width: 450px; height: 450px; animation-delay: 1.5s; }
+    .hero-ring:nth-child(4) { width: 640px; height: 640px; animation-delay: 3s; }
+    @keyframes ringpulse {
+      0%,100% { opacity: 0.3; }
+      50%      { opacity: 0.75; }
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      animation: fadeInUp 1.8s ease-out both;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-eyebrow {
+      font-size: 11px; letter-spacing: 6px;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 16px; opacity: 0.8;
+    }
+    .hero-name {
+      font-size: clamp(2.4rem, 8vw, 5rem);
+      font-weight: 300; letter-spacing: 10px;
+      color: var(--gold-light);
+      text-shadow: 0 0 40px rgba(232,201,122,0.3);
+      line-height: 1; margin-bottom: 14px;
+    }
+    .hero-sub {
+      font-size: 13px; letter-spacing: 5px;
+      text-transform: uppercase; opacity: 0.5;
+    }
+    .hero-line {
+      position: relative; z-index: 2;
+      width: 60px; height: 0.5px;
+      background: var(--gold);
+      margin: 22px auto 0; opacity: 0.6;
+    }
+    .scroll-hint {
+      position: absolute; bottom: 32px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold);
+      opacity: 0.4; animation: bounce 2.5s infinite;
+      z-index: 2;
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(-8px); }
+    }
+
+    /* ─ NAV ─ */
+    nav {
+      display: flex; justify-content: center; gap: 10px;
+      padding: 36px 20px 0;
+    }
+    .nav-btn {
+      background: none;
+      border: 0.5px solid rgba(201,165,90,0.3);
+      color: var(--gold);
+      font-family: inherit;
+      font-size: 11px; letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 9px 24px; cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .nav-btn:hover,
+    .nav-btn.active {
+      background: rgba(201,165,90,0.1);
+      border-color: rgba(201,165,90,0.7);
+      color: var(--gold-light);
+    }
+
+    /* ─ GALLERY ─ */
+    .gallery {
+      padding: 48px 24px 80px;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+      .card.featured { grid-column: span 1; }
+      .card.featured .card-visual { height: 260px; }
+    }
+
+    /* ─ CARD ─ */
+    .card {
+      position: relative;
+      background: var(--bg2);
+      border: 0.5px solid rgba(201,165,90,0.2);
+      cursor: pointer;
+      transition: transform 0.5s cubic-bezier(.2,0,.2,1), border-color 0.3s;
+      overflow: hidden;
+    }
+    .card:hover { transform: translateY(-6px); border-color: rgba(201,165,90,0.6); }
+    .card.featured { grid-column: span 2; }
+
+    .card-visual {
+      height: 240px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .card.featured .card-visual { height: 340px; }
+    .card-visual svg,
+    .card-visual img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, var(--bg2) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .card-badge {
+      position: absolute; top: 14px; right: 14px;
+      font-size: 10px; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold);
+      border: 0.5px solid rgba(201,165,90,0.5);
+      padding: 4px 10px;
+      background: rgba(12,16,48,0.85);
+    }
+    .card-body { padding: 22px 24px 28px; }
+    .card-num {
+      font-size: 10px; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold);
+      opacity: 0.55; margin-bottom: 8px;
+    }
+    .card-title {
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      font-weight: 300; font-style: italic;
+      color: var(--gold-light); margin-bottom: 10px; line-height: 1.2;
+    }
+    .card-desc {
+      font-size: 0.95rem; line-height: 1.75;
+      color: var(--text-muted); opacity: 0.9;
+    }
+    .card-tag {
+      display: inline-block; margin-top: 16px;
+      font-size: 10px; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(201,165,90,0.7);
+      border-bottom: 0.5px solid rgba(201,165,90,0.3);
+      padding-bottom: 2px;
+    }
+
+    /* ─ DETAIL PANEL ─ */
+    .detail {
+      display: none;
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(6,9,30,0.96);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 40px 28px;
+      overflow-y: auto;
+    }
+    .detail.open {
+      display: flex; flex-direction: column;
+      animation: fadeDetail 0.4s ease both;
+    }
+    @keyframes fadeDetail {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .detail-close {
+      align-self: flex-end;
+      background: none;
+      border: 0.5px solid rgba(201,165,90,0.4);
+      color: var(--gold); font-size: 18px;
+      width: 42px; height: 42px; cursor: pointer;
+      font-family: inherit;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 36px;
+      transition: all 0.2s;
+    }
+    .detail-close:hover { background: rgba(201,165,90,0.1); border-color: var(--gold); }
+    .detail-art {
+      width: 100%; max-width: 420px;
+      height: 300px; margin: 0 auto 36px;
+    }
+    .detail-art svg,
+    .detail-art img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .detail-num {
+      font-size: 10px; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 10px; opacity: 0.65;
+    }
+    .detail-title {
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      font-style: italic; font-weight: 300;
+      color: var(--gold-light); margin-bottom: 18px;
+    }
+    .detail-line {
+      width: 44px; height: 0.5px;
+      background: var(--gold); margin-bottom: 22px; opacity: 0.55;
+    }
+    .detail-desc {
+      font-size: 1rem; line-height: 1.9;
+      color: var(--text-muted); margin-bottom: 28px;
+      max-width: 560px;
+    }
+    .detail-specs {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 18px; max-width: 440px;
+    }
+    .spec { border-left: 0.5px solid rgba(201,165,90,0.3); padding-left: 14px; }
+    .spec-label {
+      font-size: 10px; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gold);
+      opacity: 0.6; margin-bottom: 4px;
+    }
+    .spec-val { font-size: 0.95rem; color: var(--text); font-style: italic; }
+
+    /* ─ ABOUT ─ */
+    .about {
+      display: none;
+      padding: 48px 24px 80px;
+      max-width: 520px; margin: 0 auto;
+      text-align: center;
+    }
+    .about.visible { display: block; }
+    .about-circle {
+      width: 110px; height: 110px; border-radius: 50%;
+      border: 0.5px solid rgba(201,165,90,0.4);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 30px; font-size: 2.8rem;
+      background: radial-gradient(circle, rgba(201,165,90,0.1) 0%, transparent 70%);
+    }
+    .about-name {
+      font-size: 2rem; font-weight: 300;
+      color: var(--gold-light); margin-bottom: 8px;
+    }
+    .about-role {
+      font-size: 11px; letter-spacing: 4px;
+      text-transform: uppercase; color: var(--gold);
+      opacity: 0.65; margin-bottom: 32px;
+    }
+    .about-text {
+      font-size: 1.05rem; line-height: 1.9;
+      color: var(--text-muted); margin-bottom: 12px;
+    }
+    .about-divider {
+      width: 44px; height: 0.5px;
+      background: var(--gold); margin: 32px auto;
+      opacity: 0.4;
+    }
+    .about-stats {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 18px;
+    }
+    .stat-n {
+      font-size: 2.2rem; font-weight: 300; color: var(--gold-light);
+    }
+    .stat-l {
+      font-size: 10px; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gold); opacity: 0.6;
+    }
+
+    /* ─ REDUCED MOTION ─ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero" aria-label="Portada">
+    <div class="hero-bg"></div>
+    <div class="hero-ring" aria-hidden="true"></div>
+    <div class="hero-ring" aria-hidden="true"></div>
+    <div class="hero-ring" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Arte Comestible</p>
+      <h1 class="hero-name">JENNY CABRERA</h1>
+      <p class="hero-sub">Edible Art Gallery</p>
+    </div>
+    <div class="hero-line"></div>
+    <p class="scroll-hint" aria-hidden="true">↓ explorar</p>
+  </section>
+
+  <!-- NAV -->
+  <nav aria-label="Secciones">
+    <button class="nav-btn active" onclick="showTab('gallery')">Galería</button>
+    <button class="nav-btn" onclick="showTab('about')">Artista</button>
+  </nav>
+
+  <!-- GALLERY -->
+  <main id="tab-gallery">
+    <div class="gallery">
+      <div class="grid">
+
+        <!-- Obra 1 — featured -->
+        <article class="card featured" onclick="openDetail(0)" role="button" tabindex="0" aria-label="Ver Fantasía Marina Efímera">
+          <div class="card-visual">
+            <img src="seahorse.png" alt="Caballito de mar de azúcar soplado">
+            <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="oceanBg" cx="50%" cy="60%" r="70%">
+                  <stop offset="0%" stop-color="#0d2040"/>
+                  <stop offset="100%" stop-color="#030810"/>
+                </radialGradient>
+                <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#4db8c8" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#4db8c8" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <rect width="500" height="300" fill="url(#oceanBg)"/>
+              <ellipse cx="250" cy="150" rx="120" ry="100" fill="url(#glow1)"/>
+              <g transform="translate(250,150)">
+                <path d="M0 60 Q30 80 20 95 Q5 110 -10 100 Q-25 85 -15 70" fill="none" stroke="#c9a55a" stroke-width="3" stroke-linecap="round"/>
+                <path d="M0 60 Q-15 40 -10 20 Q-5 0 5 -10 Q15 -20 10 -40" fill="none" stroke="#c9a55a" stroke-width="4" stroke-linecap="round"/>
+                <ellipse cx="-5" cy="20" rx="14" ry="22" fill="none" stroke="#c9a55a" stroke-width="1.5" opacity="0.5"/>
+                <path d="M8 -20 Q25 -30 20 -50 Q10 -40 8 -30" fill="rgba(201,165,90,0.2)" stroke="#c9a55a" stroke-width="1"/>
+                <ellipse cx="8" cy="-48" rx="10" ry="14" fill="none" stroke="#c9a55a" stroke-width="2"/>
+                <path d="M8 -62 Q12 -70 16 -66" fill="none" stroke="#c9a55a" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="12" cy="-52" r="3" fill="#4db8c8" opacity="0.9"/>
+                <circle cx="13" cy="-52" r="1.2" fill="#06091e"/>
+                <line x1="-16" y1="5" x2="2" y2="5" stroke="#c9a55a" stroke-width="0.8" opacity="0.4"/>
+                <line x1="-18" y1="15" x2="2" y2="15" stroke="#c9a55a" stroke-width="0.8" opacity="0.4"/>
+                <line x1="-18" y1="25" x2="0" y2="25" stroke="#c9a55a" stroke-width="0.8" opacity="0.4"/>
+                <line x1="-15" y1="35" x2="0" y2="35" stroke="#c9a55a" stroke-width="0.8" opacity="0.4"/>
+                <line x1="-10" y1="45" x2="4" y2="45" stroke="#c9a55a" stroke-width="0.8" opacity="0.4"/>
+              </g>
+              <circle cx="200" cy="80" r="3" fill="none" stroke="rgba(77,184,200,0.4)" stroke-width="0.8"/>
+              <circle cx="310" cy="60" r="5" fill="none" stroke="rgba(77,184,200,0.3)" stroke-width="0.8"/>
+              <circle cx="170" cy="180" r="2" fill="none" stroke="rgba(77,184,200,0.3)" stroke-width="0.8"/>
+              <circle cx="330" cy="200" r="4" fill="none" stroke="rgba(77,184,200,0.25)" stroke-width="0.8"/>
+              <circle cx="130" cy="100" r="1" fill="#c9a55a" opacity="0.3"/>
+              <circle cx="380" cy="130" r="1.5" fill="#c9a55a" opacity="0.25"/>
+            </svg>
+            <div class="card-overlay"></div>
+            <div class="card-badge">Azúcar Soplado</div>
+          </div>
+          <div class="card-body">
+            <p class="card-num">Obra 01</p>
+            <h2 class="card-title">Fantasía Marina Efímera</h2>
+            <p class="card-desc">Escultura de azúcar soplado y modelado a mano. Iridiscencia de la vida marina capturada con precisión asombrosa.</p>
+            <span class="card-tag">Ver más →</span>
+          </div>
+        </article>
+
+        <!-- Obra 2 -->
+        <article class="card" onclick="openDetail(1)" role="button" tabindex="0" aria-label="Ver Corazón Floreal Oculto">
+          <div class="card-visual">
+            <img src="cake.png" alt="Pastel de castaña con corazón de rosas">
+            <svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="cakeBg" cx="50%" cy="50%" r="70%">
+                  <stop offset="0%" stop-color="#1a0f08"/>
+                  <stop offset="100%" stop-color="#06091e"/>
+                </radialGradient>
+              </defs>
+              <rect width="240" height="200" fill="url(#cakeBg)"/>
+              <ellipse cx="120" cy="145" rx="65" ry="12" fill="#3d2010" stroke="#c9a55a" stroke-width="0.8"/>
+              <rect x="55" y="100" width="130" height="45" fill="#4a2912" rx="2"/>
+              <rect x="55" y="98" width="130" height="10" fill="#6b3d1a" rx="2"/>
+              <ellipse cx="120" cy="98" rx="65" ry="12" fill="#7a4820" stroke="#c9a55a" stroke-width="0.8"/>
+              <ellipse cx="120" cy="90" rx="50" ry="9" fill="#8b5226"/>
+              <rect x="70" y="58" width="100" height="32" fill="#5a3315" rx="2"/>
+              <rect x="70" y="56" width="100" height="8" fill="#7a4820" rx="2"/>
+              <ellipse cx="120" cy="56" rx="50" ry="9" fill="#8b5226" stroke="#c9a55a" stroke-width="0.8"/>
+              <path d="M90 98 Q85 110 88 118" fill="none" stroke="#f5e6d0" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+              <path d="M150 98 Q155 108 152 116" fill="none" stroke="#f5e6d0" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+              <path d="M115 56 Q110 66 113 75" fill="none" stroke="#f5e6d0" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+              <circle cx="120" cy="46" r="10" fill="#8b2040" opacity="0.9"/>
+              <circle cx="108" cy="50" r="7" fill="#9b2a4a" opacity="0.8"/>
+              <circle cx="132" cy="50" r="7" fill="#7a1835" opacity="0.8"/>
+              <circle cx="115" cy="40" r="5" fill="#c04060" opacity="0.7"/>
+              <circle cx="125" cy="38" r="5" fill="#b03050" opacity="0.7"/>
+              <ellipse cx="120" cy="36" rx="4" ry="6" fill="#d05070" opacity="0.6"/>
+              <ellipse cx="128" cy="42" rx="5" ry="4" fill="#c04060" opacity="0.5" transform="rotate(30,128,42)"/>
+              <ellipse cx="112" cy="42" rx="5" ry="4" fill="#d05070" opacity="0.5" transform="rotate(-30,112,42)"/>
+              <circle cx="100" cy="70" r="1" fill="#c9a55a" opacity="0.6"/>
+              <circle cx="143" cy="65" r="1.2" fill="#c9a55a" opacity="0.5"/>
+            </svg>
+            <div class="card-overlay"></div>
+            <div class="card-badge">Pastelería</div>
+          </div>
+          <div class="card-body">
+            <p class="card-num">Obra 02</p>
+            <h2 class="card-title">Corazón Floreal Oculto</h2>
+            <p class="card-desc">Castaña y rosa. Lo mejor reside en lo que no se ve.</p>
+            <span class="card-tag">Ver más →</span>
+          </div>
+        </article>
+
+        <!-- Obra 3 -->
+        <article class="card" onclick="openDetail(2)" role="button" tabindex="0" aria-label="Ver Orquídea Pollock">
+          <div class="card-visual">
+            <img src="orquid.png" alt="Orquídea de chocolate estilo Pollock">
+            <svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="orchBg" cx="40%" cy="50%" r="70%">
+                  <stop offset="0%" stop-color="#0a0820"/>
+                  <stop offset="100%" stop-color="#06091e"/>
+                </radialGradient>
+              </defs>
+              <rect width="240" height="200" fill="url(#orchBg)"/>
+              <path d="M20 180 Q60 120 100 80 Q130 50 160 70" fill="none" stroke="#d4304a" stroke-width="1.5" opacity="0.6"/>
+              <path d="M200 170 Q170 130 140 90 Q110 60 80 100" fill="none" stroke="#4a90d4" stroke-width="1.2" opacity="0.5"/>
+              <path d="M10 60 Q50 90 90 70 Q130 50 180 110" fill="none" stroke="#e8c440" stroke-width="1" opacity="0.5"/>
+              <path d="M220 40 Q190 80 160 100 Q120 130 100 160" fill="none" stroke="#40c870" stroke-width="0.8" opacity="0.4"/>
+              <path d="M120 190 Q118 160 120 130" fill="none" stroke="#4a7a30" stroke-width="2.5" stroke-linecap="round"/>
+              <ellipse cx="120" cy="110" rx="28" ry="14" fill="#7a2060" opacity="0.9" transform="rotate(-20,120,110)"/>
+              <ellipse cx="120" cy="110" rx="28" ry="14" fill="#8a2870" opacity="0.8" transform="rotate(20,120,110)"/>
+              <ellipse cx="98" cy="105" rx="20" ry="10" fill="#9030a0" opacity="0.7" transform="rotate(-60,98,105)"/>
+              <ellipse cx="142" cy="105" rx="20" ry="10" fill="#8028a0" opacity="0.7" transform="rotate(60,142,105)"/>
+              <ellipse cx="120" cy="88" rx="14" ry="20" fill="#6018a0" opacity="0.7"/>
+              <ellipse cx="120" cy="108" rx="8" ry="6" fill="#f0d040" opacity="0.9"/>
+              <circle cx="120" cy="107" r="3" fill="#c8a020"/>
+              <circle cx="80" cy="140" r="2" fill="#6b3d1a" opacity="0.8"/>
+              <circle cx="160" cy="150" r="3" fill="#d4304a" opacity="0.7"/>
+              <circle cx="50" cy="100" r="1.5" fill="#4a90d4" opacity="0.6"/>
+              <circle cx="190" cy="80" r="2" fill="#e8c440" opacity="0.6"/>
+              <circle cx="40" cy="170" r="2.5" fill="#40c870" opacity="0.5"/>
+              <circle cx="210" cy="160" r="2" fill="#6018a0" opacity="0.6"/>
+            </svg>
+            <div class="card-overlay"></div>
+            <div class="card-badge">Chocolate</div>
+          </div>
+          <div class="card-body">
+            <p class="card-num">Obra 03</p>
+            <h2 class="card-title">Orquídea Pollock</h2>
+            <p class="card-desc">Manteca de cacao pintada a mano. Expresionismo y naturaleza en una sola pieza.</p>
+            <span class="card-tag">Ver más →</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </main>
+  <!-- ABOUT -->
+  <section class="about" id="tab-about" aria-label="Sobre la artista">
+    <div class="about-circle" aria-hidden="true">🌺</div>
+    <h2 class="about-name">Jenny Cabrera</h2>
+    <p class="about-role">Artista Culinaria · Pastelera de Autor</p>
+    <p class="about-text">
+      Cada pieza nace de la intersección entre la técnica de confitería y el lenguaje del arte contemporáneo. Azúcar soplado, chocolate plástico, flores comestibles — materiales efímeros que convierten lo comestible en experiencia.
+    </p>
+    <div class="about-divider"></div>
+    <div class="about-stats">
+      <div class="stat"><p class="stat-n">3+</p><p class="stat-l">Técnicas</p></div>
+      <div class="stat"><p class="stat-n">∞</p><p class="stat-l">Arte</p></div>
+      <div class="stat"><p class="stat-n">1</p><p class="stat-l">Visión</p></div>
+    </div>
+  </section>
+
+  <!-- DETAIL PANEL -->
+  <div class="detail" id="detail-panel" role="dialog" aria-modal="true" aria-label="Detalle de obra">
+    <button class="detail-close" onclick="closeDetail()" aria-label="Cerrar">✕</button>
+    <div class="detail-art" id="detail-art"></div>
+    <p class="detail-num" id="detail-num"></p>
+    <h2 class="detail-title" id="detail-title"></h2>
+    <div class="detail-line"></div>
+    <p class="detail-desc" id="detail-desc"></p>
+    <div class="detail-specs" id="detail-specs"></div>
+  </div>
+
+  <script>
+    const works = [
+      {
+        num: 'Obra 01',
+        title: 'Fantasía Marina Efímera',
+        desc: 'Una inmersión en la fantasía. Escultura de azúcar soplado y modelado a mano, capturando la iridiscencia de la vida marina con una precisión asombrosa. Una pieza de coleccionista para los amantes del arte efímero.',
+        specs: [
+          { label: 'Técnica',     val: 'Azúcar soplado y modelado' },
+          { label: 'Material',    val: 'Azúcar isomalt' },
+          { label: 'Estilo',      val: 'Arte efímero' },
+          { label: 'Tiempo',      val: '14 horas' }
+        ],
+        artId: 'art-1'
+      },
+      {
+        num: 'Obra 02',
+        title: 'Corazón Floreal Oculto',
+        desc: 'La sofisticación reside en lo oculto. Un corazón de pétalos de rosa frescos y crema ligera de infusión floral, envuelto en la calidez de la castaña. Una experiencia sensorial diseñada para sorprender y deleitar.',
+        specs: [
+          { label: 'Técnica',     val: 'Pastelería de autor' },
+          { label: 'Material',    val: 'Castaña, rosa, crema' },
+          { label: 'Estilo',      val: 'Gastronomía emocional' },
+          { label: 'Capas',       val: '6 capas ocultas' }
+        ],
+        artId: 'art-2'
+      },
+      {
+        num: 'Obra 03',
+        title: 'Orquídea Pollock',
+        desc: 'Naturaleza reimaginada. Orquídea de chocolate plástico pintada a mano con manteca de cacao en una explosión de color expresionista. Una escultura comestible que desafía las normas y celebra la individualidad artística.',
+        specs: [
+          { label: 'Técnica',     val: 'Chocolate plástico' },
+          { label: 'Material',    val: 'Manteca de cacao, colorantes' },
+          { label: 'Estilo',      val: 'Expresionismo abstracto' },
+          { label: 'Inspiración', val: 'Jackson Pollock' }
+        ],
+        artId: 'art-3'
+      }
+    ];
+
+    function showTab(tab) {
+      const isGallery = tab === 'gallery';
+      document.getElementById('tab-gallery').style.display = isGallery ? 'block' : 'none';
+      document.getElementById('tab-about').classList.toggle('visible', !isGallery);
+      document.querySelectorAll('.nav-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', (i === 0) === isGallery);
+      });
+    }
+
+    function openDetail(i) {
+      const w = works[i];
+      // Clona el SVG de la card correspondiente
+      const cards = document.querySelectorAll('.card');
+      const srcVisual = cards[i].querySelector('.card-visual svg, .card-visual img');
+      const artContainer = document.getElementById('detail-art');
+      artContainer.innerHTML = '';
+      if (srcVisual) artContainer.appendChild(srcVisual.cloneNode(true));
+
+      document.getElementById('detail-num').textContent   = w.num;
+      document.getElementById('detail-title').textContent = w.title;
+      document.getElementById('detail-desc').textContent  = w.desc;
+      document.getElementById('detail-specs').innerHTML   = w.specs
+        .map(s => `<div class="spec"><p class="spec-label">${s.label}</p><p class="spec-val">${s.val}</p></div>`)
+        .join('');
+
+      document.getElementById('detail-panel').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetail() {
+      document.getElementById('detail-panel').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Cerrar con Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeDetail();
+    });
+
+    // Accesibilidad: abrir con Enter/Space en cards
+    document.querySelectorAll('.card').forEach((card, i) => {
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openDetail(i);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
